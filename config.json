@@ -1,0 +1,123 @@
+{
+    "MODEL_ID":     "sbercard_cards",
+    "MODEL_NO":     "29",
+    "VERSION_ID":   "",
+    "RS":       19,
+    "DEV": "ALL",
+    "OOT": "DEC/20",
+    "IDCOLUMNS": "epk_id report_dt",
+    "DROPCOLUMNS": "seg_main_card_dwh_id prl_agrmnt_nbr client_region client_city claiming_client mdm_id mdm_dwh_pty_id sd_doc_type_id sd_doc_type_name seg_crm_client_mgr_login_name seg_client_segment_bitmask_cd seg_crd_txn_mcc_cluster_id seg_crd_txn_mcc_cluster_name seg_service_channel_cd prd_lst_prod_vsp_cd prd_lst_prod_division_dk prd_1st_prod_osb_cd prd_1st_prod_vsp_cd lbt_acct_max_bal_osb_cd lbt_acct_max_bal_vsp_cd lbt_payroll_bitmask_l12m_cd lbt_social_bitmask_l12m_cd crd_lst_agrmnt_osb_cd crd_lst_agrmnt_vsp_cd tp_lst_division_dk lifestyle_military_inn",
+    "TESTSIZE": 0.2,
+    "STAGE": {
+        "PRESEL": {
+            "STATUS":   "TODO",
+            "MODE":     "REAL",
+            "NFEATS":   50,
+            "VALID":    0.25,
+            "NITER":    500,
+            "NJOBS":    20,
+            "STOP":     30,
+            "VERBOSE":  "TRUE"
+        },
+        "PIPELINE": {
+            "STATUS":   "TODO",
+            "MODE":     "REAL",
+            "SAMPLE":   0.5,
+            "VALID":    0.25,
+            "NSPLITS":  5,
+            "NITER":    500,
+            "NJOBS":    30,
+            "STOP":     30,
+            "MODELS":   "CATBOOST XGBOOST LIGHTGBM",
+            "SAMPLERS": "UNDER NOOVER",
+            "FRACS":    "1 5 25",
+            "BANDS":    "FALSE",
+            "NBS":      2000,
+            "VERBOSE":  "TRUE",
+            "RESULT": {
+                "MODEL":    "CATBOOST",
+                "VALID":    0.25,
+                "NITER":    500,
+                "NJOBS":    30,
+                "STOP":     30,
+                "SAMPLER":  "UNDER",
+                "FRAC":     25
+            }
+        },
+        "FINESEL": {
+            "STATUS":   "TODO",
+            "MODE":     "REAL",
+            "SAMPLE":   {
+                "FRAC":     0.25,
+                "UNDER":    "TRUE"
+            },
+            "BINNER": {
+                "PARAMS": {
+                    "max_bins": 20,
+                    "min_size": 0.05,
+                    "method": "anneal",
+                    "n_iter": 200,
+                    "starts_from": 100
+                },
+                "FAST": "FALSE"
+            },
+            "VIF_CUTOFF": 1.7,
+            "PERMIMP": {
+                "NSPLITS": 10,
+                "NITER": 10
+            },
+            "VERBOSE":  "TRUE",
+            "RESULT":   1
+        },
+        "TUNING":   {
+            "STATUS":   "TODO",
+            "MODE":     "REAL",
+            "NFEATS":   10,
+            "HYPEROPT": {
+                "STATUS":       "TODO",
+                "DESIGN":       "KFOLD",
+                "NSPLITS":      3,
+                "SAMPLE":       0.5,
+                "FRACAMP":      4,
+                "ALGO":         "ANNEAL",
+                "NEVALS":       10,
+                "KFOLD_FINE":   0.25,
+                "STABLETUNING": {
+                    "F_LOWER":      4,
+                    "F_UPPER":      10,
+                    "ACCEPT_LVL":   25,
+                    "ACTUALITY":    1.5,
+                    "STABLE_FINE": 5
+                }
+            },
+            "FINALVALID":   0,
+            "FINALSTOP":    0,
+            "BESTPARAMS":   {"depth": 3.0, "frac": 0.23010589728100547, "l2_leaf_reg": 0.030276674060622396, "rsm": 0.1469212918447341},
+            "OOTSAMPLE":    0.25,
+            "VERBOSE":      "TRUE"
+        },
+        "DEPLOY": {
+            "STATUS": "TODO",
+            "MODE": "REAL",
+            "MODEL": 0
+        }
+    },
+    "TESTPARAMS": {
+        "DICT": {
+            "n_samples": 50000, "n_features": 7, "flip_y": 0.01, "class_sep": 0.9, "n_clusters_per_class": 2,
+            "n_informative": 3, "n_redundant": 1, "n_repeated": 3, "n_classes": 2, "hypercube": 1, "shift": 0,
+            "scale": 10, "shuffle": 1
+        },
+        "NCAT":     3,
+        "WEIGHT":   0.01,
+        "OOTPART":  0.1,
+        "NDATES": 5
+    },
+    "PATH": {
+        "DATA":     "DEFAULT",
+        "RESULTS":  "DEFAULT",
+        "REPORTS":  "DEFAULT",
+        "CATCOLS":  "DEFAULT",
+        "TEST":     "DEFAULT"
+    }
+}
